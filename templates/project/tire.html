@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}<title>Pneuservis</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+ 
+  <nav class="navbar navbar-dark bg-primary navbar-expand-lg ">
+    <a class="navbar-brand" href="{% url 'index' %}">Pneuservis</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'index' %}">Domů <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'customers' %}">Seznam zákazníků</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'vehicles' %}">Seznam vozidel</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'tires' %}">Seznam pneumatik</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'records' %}">Servisní záznamy</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'add_record' %}">Vytvořit servisní záznam</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'workers' %}">Servisní pracovníci</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'contacts' %}">Kontakt</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="col-sm-10 ">{% block content %}
+
+        <div class="card w-75" style="margin-left: 18%; margin-right: 18%; width: auto; margin-top: 2%;">
+          <div class="card-body">
+            <h5 class="card-title">Pneumatiky {{tire.znacka}}</h5>
+            <p class="card-text"><p>Značka a model: {{tire.znacka}}</p>
+            <p>Rozměry: {{tire.rozmery}}</p>    
+            {% if  tire.typ == 0 %} <p>Typ: Letní</p> {%  endif %} 
+            {% if  tire.typ == 1 %} <p>Typ: Zimní</p> {%  endif %} 
+            {% if  tire.typ == 2 %} <p>Typ: Celoroční</p> {%  endif %} 
+            {% if  tire.typ == 3 %} <p>Typ: Motocykl</p> {%  endif %} 
+            {% if  tire.typ == 4 %} <p>Typ: Autobus</p> {%  endif %} 
+            {% if  tire.typ == 5 %} <p>Typ: Traktor (bagr)</p> {%  endif %} 
+
+            {% if  tire.sjete == '0' %} <p>Sjeté: NE</p> {%  endif %} 
+            {% if  tire.sjete == '1' %} <p>Sjeté: ANO</p> {%  endif %}                            
+            <p>Hloubka dezénu: {{tire.hloubka_dezenu}}</p>
+          </p>
+
+            <button type="button" class="btn btn-primary" style="margin-bottom: 2%;" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Upravit info </button>
+
+            <form action="{% url 'tireDelete' tire.id %}" method="post">
+                {% csrf_token %}
+                <input class="btn btn-primary" type="submit" value="Smazat pneumatiky">
+                
+              </form>
+          
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Upravit vozidlo</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{% url 'edit_tire' tire.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group required">
+                          <label for="recipient-name" class="col-form-label ">Značka a model:</label>
+                          <input name="tire_brand" type="text" class="form-control" required="true" autofocus value="{{tire.znacka}}" >
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <label for="recipient-name" class="col-form-label">Rozměry:</label>
+                            <input name="tire_size" type="text" class="form-control"  maxlength="10"  required="true" autofocus value="{{tire.rozmery}}">
+                          </div>
+
+                          <div class="col">
+                            <label for="recipient-name" class="col-form-label">Hloubka dezénu:</label>
+                            <input name="tire_depth" type="number" class="form-control" min="1" max="8"  required="true" autofocus value="{{tire.hloubka_dezenu}}">
+                          </div>
+                        </div>
+                        
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
+                            <input type="submit" class="btn btn-primary" ></input>
+                          </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+          
+
+        {% endblock %}</div>
+    </div>
+  </div>
+  <nav class="navbar fixed-bottom navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">© All right reserved</a>
+  </nav>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}<title>Pneuservis</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link href="{% static 'css/all.css' %}" rel="stylesheet">
+  <script defer src="{% static 'css/all.js' %}"></script>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-primary navbar-expand-lg ">
+    <a class="navbar-brand" href="{% url 'index' %}">Pneuservis</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'index' %}">Domů <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'customers' %}">Seznam zákazníků</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'vehicles' %}">Seznam vozidel</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'tires' %}">Seznam pneumatik</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'records' %}">Servisní záznamy</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'add_record' %}">Vytvořit servisní záznam</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'workers' %}">Servisní pracovníci</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'contacts' %}">Kontakt</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container d-flex justify-content-center " >
+    <div class="row">
+        <div class="card" style="width: 25rem;">
+            <img src="{% static 'images/jc.png' %}" alt="My image">
+            <div class="card-header" style="font-weight: bold;">
+                Created by: JOC0027
+              </div>
+            <div class="card-body">
+                
+              <h5 class="card-title" style="line-height: 0.6; text-align: center;"><p>🌸 Spread the love 🌸</p>
+                <p>🌸 Make her pussy wet 🌸</p>
+                <p>🌸 Not her eyes 🌸</p>
+
+              
+                              
+            </div>
+          </div>
+      
+    </div>
+  </div>
+  <nav class="navbar fixed-bottom navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">© All rights reserved</a>
+  </nav>
+</body>
+</html>

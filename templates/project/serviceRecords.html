@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}<title>Pneuservis</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+ 
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+  <script>
+    function searchTires(input){
+     var tires = $(".date_record");
+ 
+     $.each(tires, function(){
+         var name = $.trim(this.innerText);
+         console.log(name.includes(input));
+         if(name.includes(input)){
+            
+            $(this).parent().show();
+         }else{
+             $(this).parent().hide();
+         }
+     });
+ }
+ 
+   $(document).ready(function(){
+       $(".search_input").keyup(function(){
+         searchTires(this.value);
+       });
+   });
+ </script>
+</head>
+<body>
+
+  
+    <nav class="navbar navbar-dark bg-primary navbar-expand-lg ">
+        <a class="navbar-brand" href="{% url 'index' %}">Pneuservis</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'index' %}">Domů <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'customers' %}">Seznam zákazníků</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'vehicles' %}">Seznam vozidel</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'tires' %}">Seznam pneumatik</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'records' %}">Servisní záznamy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'add_record' %}">Vytvořit servisní záznam</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'workers' %}">Servisní pracovníci</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'contacts' %}">Kontakt</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card "style="margin-left: 20%; margin-top: 2%; width: 60%;">
+        <div class="card-header" style="font-size:x-large; font-weight: bold; ">
+          Servisní záznamy
+          <input class="form-control mr-sm-2 search_input" style="float: right; width: 25%;"  type="search" placeholder="Search" aria-label="Search">      
+        </div>
+        <div class="card-body"> 
+          <div class="scrollable" style="overflow-y:auto; max-height: 700px;">
+          <p class="card-text" >            
+            {% for record in records %}
+            <div class="card text-left " style="width: 60%; margin-top: 2%; margin-left: 20%;">
+              <div class="card-header" style="font-weight: bold;">
+                Servisní záznam
+              </div>
+                <div class="card-body">
+                  <p class="card-text"><p style="font-weight: bold;"> Pracovník: {{record.pracovnikid.login}}</p>
+                  <p style="font-weight: bold;"> Zákazník</p>
+                  <p> Jméno: {{record.zakaznikid.jmeno}}</p>
+                  <p> Přijmení: {{record.zakaznikid.prijmeni}}</p>
+                  <p> Login: {{record.zakaznikid.login}}</p>
+                  <p style="font-weight: bold;"> Vozidlo</p>
+                  <p> Značka a model: {{record.vozidloid.znacka}}</p>
+                  <p> SPZ: {{record.vozidloid.spz}}</p>
+                  <p> Typ vozidla: {{record.vozidloid.typvozidlaid.nazev}}</p>
+                  <p style="font-weight: bold;"> Provedený servis</p>
+                  <p> Typ servisu: {{record.typid.nazev}}</p>
+                  <p> Rozměry: {{record.pneuid_predni.rozmery}}</p>
+                  <p> Přední pneumatiky: {{record.pneuid_predni.znacka}}</p>
+                  <p> Zadní pneumatiky: {{record.pneuid_zadni.znacka}}</p>
+                </p>
+                <form action="{% url 'deleteRecord' record.id %}" method="post">
+                  {% csrf_token %}
+                  <input class="btn btn-primary" type="submit" value="Smazat záznam">             
+                </form>
+                </div>
+                <div class="card-footer text-muted date_record">
+                  {{record.datum}}
+                </div>
+              </div>
+              {% endfor %}             
+        </p>
+      </div> 
+     </div>
+      </div>
+  </div>
+</div>
+
+
+</body>
+</html>
